@@ -232,39 +232,32 @@
 
                                 </td>
 
-                                <td data-label="Acción">
+                                <td>
+                                    <div class="table-actions">
 
-                                    <% if ("RESUELTO".equals(h.getEstadoActual())) { %>
+                                        <% if ("RESUELTO".equalsIgnoreCase(ticket.getEstadoActual())) { %>
 
-                                    <button type="button"
-                                            class="btn-table"
-                                            onclick="abrirModalCierre(
-                                                            '<%= h.getIdTicket() %>',
-                                                            '<%= h.getCodigoTicket() %>'
-                                                            )">
+                                        <button type="button"
+                                                class="btn-table"
+                                                onclick="abrirModalCierre(
+                        '<%= ticket.getIdTicket() %>',
+                        '<%= ticket.getCodigoTicket() %>'
+                    )">
+                                            <i class="fas fa-check-circle"></i>
+                                            Cerrar ticket
+                                        </button>
 
-                                        <i class="fa-solid fa-check"></i>
-                                        Cerrar ticket
-                                    </button>
+                                        <% } else { %>
 
-                                    <% } else if ("CERRADO".equals(h.getEstadoActual())) { %>
+                                        <a class="btn-table secundario"
+                                           href="<%= request.getContextPath() %>/SeguimientoTicketServlet?accion=detalle&id=<%= ticket.getIdTicket() %>">
+                                            <i class="fas fa-eye"></i>
+                                            Ver seguimiento
+                                        </a>
 
-                                    <span class="texto-cerrado">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        Cerrado
-                                    </span>
+                                        <% } %>
 
-                                    <% } else { %>
-
-                                    <a class="btn-table secundario"
-                                       href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoTicket&id=<%= h.getIdTicket() %>&seguimiento=si">
-
-                                        <i class="fa-solid fa-eye"></i>
-                                        Ver detalle
-                                    </a>
-
-                                    <% } %>
-
+                                    </div>
                                 </td>
 
                             </tr>
