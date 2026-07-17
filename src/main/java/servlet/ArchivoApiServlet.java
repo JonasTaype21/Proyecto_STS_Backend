@@ -53,7 +53,7 @@ public class ArchivoApiServlet extends HttpServlet {
             10L * 1024L * 1024L;
 
     private static final String ORIGEN_ANGULAR =
-            "http://localhost:4200";
+            "https://sts-angular.onrender.com";
 
     private static final SimpleDateFormat FORMATO_FECHA =
             new SimpleDateFormat(
