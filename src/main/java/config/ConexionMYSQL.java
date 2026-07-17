@@ -5,24 +5,30 @@ import java.sql.DriverManager;
 
 public class ConexionMYSQL {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/TicketsSoporte"
-        + "?useUnicode=true"
-        + "&characterEncoding=UTF-8"
-        + "&connectionCollation=utf8mb4_unicode_ci"
-        + "&serverTimezone=UTC";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
     public static Connection getConexion() {
-        Connection cn = null;
 
         try {
+
+            String host = System.getenv("MYSQLHOST");
+            String port = System.getenv("MYSQLPORT");
+            String db = System.getenv("MYSQLDATABASE");
+            String user = System.getenv("MYSQLUSER");
+            String pass = System.getenv("MYSQLPASSWORD");
+
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + db
+                    + "?useUnicode=true"
+                    + "&characterEncoding=UTF-8"
+                    + "&serverTimezone=UTC"
+                    + "&useSSL=false";
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-            cn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            return DriverManager.getConnection(url, user, pass);
+
         } catch (Exception e) {
-            System.out.println("Error de conexión: " + e.getMessage());
+            throw new RuntimeException("Error conectando a MySQL", e);
         }
 
-        return cn;
     }
+
 }
