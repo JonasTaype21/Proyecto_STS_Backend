@@ -39,7 +39,7 @@ public class ComentarioApiServlet extends HttpServlet {
             new ComentarioTicketDAO();
 
     private static final String ORIGEN_ANGULAR =
-            "http://localhost:4200";
+            "https://sts-angular.onrender.com";
 
     private static final SimpleDateFormat FORMATO_FECHA =
             new SimpleDateFormat("dd/MM/yyyy HH:mm");

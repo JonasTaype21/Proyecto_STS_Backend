@@ -20,7 +20,7 @@ public class SesionApiServlet extends HttpServlet {
     private final Gson gson = new Gson();
 
     private static final String ORIGEN_ANGULAR =
-            "http://localhost:4200";
+            "https://sts-angular.onrender.com";
 
     @Override
     protected void doOptions(

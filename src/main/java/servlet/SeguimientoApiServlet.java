@@ -151,7 +151,7 @@ public class SeguimientoApiServlet extends HttpServlet {
          */
         response.setHeader(
                 "Access-Control-Allow-Origin",
-                "http://localhost:4200"
+                "https://sts-angular.onrender.com"
         );
 
         response.setHeader(
