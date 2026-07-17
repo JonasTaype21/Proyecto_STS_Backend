@@ -4,10 +4,9 @@
 <%
     Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-    String vista = request.getParameter("vista");
-
-    if (vista == null || vista.trim().isEmpty()) {
-        vista = "dashboard";
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
     }
 %>
 
@@ -15,7 +14,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+
         <title>Panel Técnico</title>
 
         <link rel="stylesheet"
@@ -27,6 +29,7 @@
 
     <body class="dashboard-body">
 
+        <!-- BOTÓN MENÚ MÓVIL -->
         <button type="button"
                 class="menu-toggle"
                 id="menuToggle"
@@ -37,13 +40,12 @@
 
         </button>
 
+        <!-- FONDO OSCURO DEL MENÚ -->
         <div class="sidebar-overlay"
              id="sidebarOverlay">
         </div>
 
-        <!-- =========================
-             MENÚ LATERAL
-        ========================== -->
+        <!-- MENÚ LATERAL -->
         <div class="sidebar">
 
             <div class="logo-area">
@@ -51,31 +53,34 @@
                 <span>Soporte TI</span>
             </div>
 
-            <div class="menu-title">MENÚ TÉCNICO</div>
+            <div class="menu-title">
+                MENÚ TÉCNICO
+            </div>
 
-            <a class="menu-item <%= "dashboard".equals(vista) ? "active" : "" %>"
+            <a class="menu-item active"
                href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp">
+
                 <i class="fa-solid fa-house"></i>
                 Dashboard
             </a>
 
-            <a class="menu-item <%= "tickets".equals(vista) ? "active" : "" %>"
-               href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp?vista=tickets">
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
                 <i class="fa-solid fa-screwdriver-wrench"></i>
                 Tickets asignados
             </a>
 
             <a class="menu-item logout"
                href="${pageContext.request.contextPath}/LogoutServlet">
+
                 <i class="fa-solid fa-right-from-bracket"></i>
                 Cerrar sesión
             </a>
 
         </div>
 
-        <!-- =========================
-             CONTENIDO PRINCIPAL
-        ========================== -->
+        <!-- CONTENIDO PRINCIPAL -->
         <div class="main-content">
 
             <!-- CABECERA -->
@@ -93,7 +98,9 @@
                     </p>
                 </div>
 
-                <div class="user-badge">TÉCNICO</div>
+                <div class="user-badge">
+                    TÉCNICO
+                </div>
 
             </div>
 
@@ -150,46 +157,18 @@
 
                 <div class="quick-actions">
 
-                    <a href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp?vista=tickets"
+                    <a href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados"
                        class="btn-panel">
 
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                         Ver tickets asignados
-
                     </a>
 
                 </div>
 
             </div>
 
-            <!-- CONTENIDO DEL IFRAME -->
-            <div class="section-panel panel-frame-container">
-
-                <iframe
-                    id="panelTecnicoFrame"
-                    name="panelTecnicoFrame"
-                    class="panel-frame">
-                </iframe>
-
-            </div>
-
         </div>
-
-        <!-- =========================
-                         CARGA SEGÚN LA VISTA
-                    ========================== -->
-        <script>
-            const vistaActual = "<%= vista %>";
-const panelTecnico = document.getElementById("panelTecnicoFrame");
-
-if (vistaActual === "tickets") {
-    panelTecnico.src =
-        "${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados";
-}
-
-/* IMPORTANTE */
-window.name = "";
-        </script>
 
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 

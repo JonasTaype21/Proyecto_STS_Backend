@@ -3,22 +3,33 @@
 
 <%
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+
         <title>Panel Administrador</title>
 
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
+        <link rel="stylesheet"
+              href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
 
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
 
     <body class="dashboard-body">
+
+        <!-- BOTÓN MENÚ MÓVIL -->
         <button type="button"
                 class="menu-toggle"
                 id="menuToggle"
@@ -29,10 +40,12 @@
 
         </button>
 
+        <!-- FONDO OSCURO DEL MENÚ -->
         <div class="sidebar-overlay"
              id="sidebarOverlay">
         </div>
 
+        <!-- SIDEBAR -->
         <div class="sidebar">
 
             <div class="logo-area">
@@ -71,9 +84,14 @@
                 <i class="fa-solid fa-chart-column"></i>
                 Reportes
             </a>
-            <a class="menu-item" href="${pageContext.request.contextPath}/HistorialServlet?accion=listar">
-                <i class="fa-solid fa-clock-rotate-left"></i> Historial
+
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/HistorialServlet?accion=listar">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Historial
             </a>
+
             <a class="menu-item logout"
                href="${pageContext.request.contextPath}/LogoutServlet">
 
@@ -83,12 +101,15 @@
 
         </div>
 
+        <!-- CONTENIDO PRINCIPAL -->
         <div class="main-content">
 
+            <!-- CABECERA -->
             <div class="topbar">
 
                 <div>
                     <h1>Panel Administrador</h1>
+
                     <p>
                         Bienvenido al panel de Administrador,
                         <strong>
@@ -104,9 +125,11 @@
 
             </div>
 
+            <!-- TARJETAS -->
             <div class="cards-container">
 
                 <div class="card-dashboard">
+
                     <div class="card-icon azul">
                         <i class="fa-solid fa-ticket"></i>
                     </div>
@@ -115,9 +138,11 @@
                         <h3>Tickets</h3>
                         <p>Gestión general de incidencias</p>
                     </div>
+
                 </div>
 
                 <div class="card-dashboard">
+
                     <div class="card-icon verde">
                         <i class="fa-solid fa-users"></i>
                     </div>
@@ -126,9 +151,11 @@
                         <h3>Usuarios</h3>
                         <p>Administrar usuarios y técnicos</p>
                     </div>
+
                 </div>
 
                 <div class="card-dashboard">
+
                     <div class="card-icon naranja">
                         <i class="fa-solid fa-chart-column"></i>
                     </div>
@@ -137,16 +164,29 @@
                         <h3>Reportes</h3>
                         <p>Indicadores y tiempos de atención</p>
                     </div>
+
+                </div>
+
+                <div class="card-dashboard">
+
+                    <div class="card-icon azul">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+
+                    <div>
+                        <h3>Historial</h3>
+                        <p>Trazabilidad de movimientos y estados</p>
+                    </div>
+
                 </div>
 
             </div>
 
+            <!-- ACCESOS RÁPIDOS -->
             <div class="section-panel">
 
                 <div class="section-header">
-
                     <h2>Accesos rápidos</h2>
-
                 </div>
 
                 <div class="quick-actions">
@@ -172,11 +212,20 @@
                         Ver Reportes
                     </a>
 
+                    <a href="${pageContext.request.contextPath}/HistorialServlet?accion=listar"
+                       class="btn-panel">
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Ver Historial
+                    </a>
+
                 </div>
 
             </div>
 
         </div>
+
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
+
     </body>
 </html>

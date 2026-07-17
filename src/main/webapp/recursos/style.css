@@ -1146,12 +1146,22 @@ p[style*="red"] {
         min-height: 100dvh;
     }
 
-    /*
-       En móvil ocultamos el menú lateral.
-       Más adelante se puede convertir en menú hamburguesa.
-    */
+    /* El menú lateral se convierte en panel deslizable */
     .sidebar {
-        display: none;
+        display: flex;
+        width: 265px;
+        height: 100dvh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1200;
+        overflow-y: auto;
+        transform: translateX(-110%);
+        transition: transform 0.28s ease;
+    }
+
+    .sidebar.sidebar-open {
+        transform: translateX(0);
     }
 
     .main-content {
@@ -1468,7 +1478,6 @@ p[style*="red"] {
     }
 }
 
-
 /* =========================
    MENÚ MÓVIL Y PÁGINAS DE ESTADO
 ========================= */
@@ -1499,13 +1508,19 @@ p[style*="red"] {
     backdrop-filter: blur(2px);
     opacity: 0;
     visibility: hidden;
-    transition: opacity .25s ease, visibility .25s ease;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
     z-index: 1150;
 }
 
-.sidebar-overlay.active {
+.sidebar-overlay.overlay-active {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
+}
+
+body.menu-open {
+    overflow: hidden;
 }
 
 .error-page {
@@ -1541,13 +1556,6 @@ p[style*="red"] {
     margin-bottom: 22px;
 }
 
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Botón secundario */
 .btn-panel.secundario {
     background: #e2e8f0;
     color: #0f172a;
@@ -1559,34 +1567,13 @@ p[style*="red"] {
     color: #0f172a;
 }
 
-/* Ajuste para que el contenido no quede debajo del botón móvil */
 @media (max-width: 900px) {
-
     .menu-toggle {
         display: inline-flex;
     }
 
-    .sidebar {
-        display: flex !important;
-        width: 265px;
-        height: 100dvh;
-        left: -285px;
-        top: 0;
-        z-index: 1200;
-        transition: left .28s ease;
-        overflow-y: auto;
-    }
-
-    .sidebar.active {
-        left: 0;
-    }
-
     .main-content {
         padding-top: 76px;
-    }
-
-    body.menu-open {
-        overflow: hidden;
     }
 }
 
