@@ -18,6 +18,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Detalle del Ticket</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
     </head>
@@ -54,65 +55,68 @@
                 <p>Aún no se ha registrado solución.</p>
                 <% } %>
             </div>
-            
-            <% if ("si".equals(seguimiento)) { %>
-            <div class="detalle-card">
-                <h2>Seguimiento del Ticket</h2>
 
-                <table class="tabla-historial">
-                    <tr>
-                        <th>Etapa</th>
-                        <th>Estado anterior</th>
-                        <th>Estado nuevo</th>
-                        <th>Fecha</th>
-                        <th>Responsable</th>
-                        <th>Comentario</th>
-                    </tr>
+                <% if ("si".equals(seguimiento)) { %>
+                <div class="detalle-card">
+                    <h2>Seguimiento del Ticket</h2>
 
-                    <% if (historial != null) {
+                    <div class="table-wrapper">
+
+                        <table class="tabla-historial">
+                            <tr>
+                                <th>Etapa</th>
+                                <th>Estado anterior</th>
+                                <th>Estado nuevo</th>
+                                <th>Fecha</th>
+                                <th>Responsable</th>
+                                <th>Comentario</th>
+                            </tr>
+
+                            <% if (historial != null) {
                 for (HistorialTicket h : historial) { %>
 
-                    <tr>
-                        <td><strong><%= h.getAccion() %></strong></td>
-                        <td><%= h.getEstadoAnterior() == null ? "-" : h.getEstadoAnterior() %></td>
-                        <td><span class="estado-activo"><%= h.getEstadoNuevo() %></span></td>
-                        <td><%= h.getFechaAccion() == null ? "-" : formatoFecha.format(h.getFechaAccion()) %></td>
-                        <td><%= h.getNombreUsuario() %></td>
-                        <td><%= h.getComentario() %></td>
-                    </tr>
+                            <tr>
+                                <td><strong><%= h.getAccion() %></strong></td>
+                                <td><%= h.getEstadoAnterior() == null ? "-" : h.getEstadoAnterior() %></td>
+                                <td><span class="estado-activo"><%= h.getEstadoNuevo() %></span></td>
+                                <td><%= h.getFechaAccion() == null ? "-" : formatoFecha.format(h.getFechaAccion()) %></td>
+                                <td><%= h.getNombreUsuario() %></td>
+                                <td><%= h.getComentario() %></td>
+                            </tr>
 
-                    <% }} %>
-                </table>
-            </div>
-        <% } %>
-            <% if ("RESUELTO".equals(ticket.getEstado()) && "si".equals(seguimiento)) { %>
+                            <% }} %>
+                        </table>
+                    </div> 
+                </div>
+                <% } %>
+                <% if ("RESUELTO".equals(ticket.getEstado()) && "si".equals(seguimiento)) { %>
 
-            <div class="detalle-card">
-                <h2>Acciones del ticket</h2>
+                <div class="detalle-card">
+                    <h2>Acciones del ticket</h2>
 
-                <form action="${pageContext.request.contextPath}/TicketServlet" method="post">
-                    <input type="hidden" name="accion" value="cerrar">
-                    <input type="hidden" name="idTicket" value="<%= ticket.getIdTicket() %>">
+                    <form action="${pageContext.request.contextPath}/TicketServlet" method="post">
+                        <input type="hidden" name="accion" value="cerrar">
+                        <input type="hidden" name="idTicket" value="<%= ticket.getIdTicket() %>">
 
-                    <button type="submit" onclick="return confirm('¿Deseas cerrar este ticket?');">
-                        Cerrar ticket
-                    </button>
-                </form>
+                        <button type="submit" onclick="return confirm('¿Deseas cerrar este ticket?');">
+                            Cerrar ticket
+                        </button>
+                    </form>
 
-                <form action="${pageContext.request.contextPath}/TicketServlet" method="post">
-                    <input type="hidden" name="accion" value="reabrir">
-                    <input type="hidden" name="idTicket" value="<%= ticket.getIdTicket() %>">
+                    <form action="${pageContext.request.contextPath}/TicketServlet" method="post">
+                        <input type="hidden" name="accion" value="reabrir">
+                        <input type="hidden" name="idTicket" value="<%= ticket.getIdTicket() %>">
 
-                    <label>Motivo para reabrir:</label>
-                    <textarea name="motivo" rows="3" required></textarea>
+                        <label>Motivo para reabrir:</label>
+                        <textarea name="motivo" rows="3" required></textarea>
 
-                    <button type="submit" onclick="return confirm('¿Deseas reabrir este ticket?');">
-                        Reabrir ticket
-                    </button>
-                </form>
-            </div>
+                        <button type="submit" onclick="return confirm('¿Deseas reabrir este ticket?');">
+                            Reabrir ticket
+                        </button>
+                    </form>
+                </div>
 
-            <% } %>
+                <% } %>
 
         </div>
 

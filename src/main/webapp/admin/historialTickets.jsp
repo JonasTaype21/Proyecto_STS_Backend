@@ -13,6 +13,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Historial de Tickets</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
@@ -20,6 +21,19 @@
     </head>
 
     <body class="dashboard-body">
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
 
         <div class="sidebar">
             <div class="logo-area">
@@ -69,42 +83,43 @@
                 <div class="section-header">
                     <h2>Movimientos registrados</h2>
                 </div>
+                <div class="table-wrapper">
+                    <table class="tabla-historial">
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Categoría</th>
+                            <th>Prioridad</th>
+                            <th>Solicitante</th>
+                            <th>Técnico</th>
+                            <th>Creado</th>
+                            <th>Asignado</th>
+                            <th>En proceso</th>
+                            <th>Resuelto</th>
+                            <th>Cerrado</th>
+                            <th>Estado actual</th>
+                        </tr>
 
-                <table class="tabla-historial">
-                    <tr>
-                        <th>Ticket</th>
-                        <th>Categoría</th>
-                        <th>Prioridad</th>
-                        <th>Solicitante</th>
-                        <th>Técnico</th>
-                        <th>Creado</th>
-                        <th>Asignado</th>
-                        <th>En proceso</th>
-                        <th>Resuelto</th>
-                        <th>Cerrado</th>
-                        <th>Estado actual</th>
-                    </tr>
-
-                    <% if (historial != null) {
+                        <% if (historial != null) {
         for (HistorialTicket h : historial) { %>
 
-                    <tr>
-                        <td><strong><%= h.getCodigoTicket() %></strong></td>
-                        <td><%= h.getCategoria() %></td>
-                        <td><span class="badge"><%= h.getPrioridad() %></span></td>
-                        <td><%= h.getNombreUsuario() %></td>
-                        <td><%= h.getTecnicoAsignado() == null ? "Sin asignar" : h.getTecnicoAsignado() %></td>
-                        <td><%= h.getFechaCreacion() == null ? "-" : formatoFecha.format(h.getFechaCreacion()) %></td>
-                        <td><%= h.getFechaAsignacion() == null ? "-" : formatoFecha.format(h.getFechaAsignacion()) %></td>
-                        <td><%= h.getFechaInicio() == null ? "-" : formatoFecha.format(h.getFechaInicio()) %></td>
-                        <td><%= h.getFechaSolucion() == null ? "-" : formatoFecha.format(h.getFechaSolucion()) %></td>
-                        <td><%= h.getFechaCierre() == null ? "-" : formatoFecha.format(h.getFechaCierre()) %></td>
-                       
-                        <td><span class="estado-activo"><%= h.getEstadoNuevo() %></span></td>
-                    </tr>
+                        <tr>
+                            <td><strong><%= h.getCodigoTicket() %></strong></td>
+                            <td><%= h.getCategoria() %></td>
+                            <td><span class="badge"><%= h.getPrioridad() %></span></td>
+                            <td><%= h.getNombreUsuario() %></td>
+                            <td><%= h.getTecnicoAsignado() == null ? "Sin asignar" : h.getTecnicoAsignado() %></td>
+                            <td><%= h.getFechaCreacion() == null ? "-" : formatoFecha.format(h.getFechaCreacion()) %></td>
+                            <td><%= h.getFechaAsignacion() == null ? "-" : formatoFecha.format(h.getFechaAsignacion()) %></td>
+                            <td><%= h.getFechaInicio() == null ? "-" : formatoFecha.format(h.getFechaInicio()) %></td>
+                            <td><%= h.getFechaSolucion() == null ? "-" : formatoFecha.format(h.getFechaSolucion()) %></td>
+                            <td><%= h.getFechaCierre() == null ? "-" : formatoFecha.format(h.getFechaCierre()) %></td>
 
-                    <% }} %>
-                </table>
+                            <td><span class="estado-activo"><%= h.getEstadoNuevo() %></span></td>
+                        </tr>
+
+                        <% }} %>
+                    </table>
+                </div>
             </div>
 
         </div>

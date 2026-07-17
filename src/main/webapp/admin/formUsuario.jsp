@@ -21,6 +21,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><%= tituloFormulario %></title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
@@ -28,6 +29,19 @@
     </head>
 
     <body class="dashboard-body">
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
 
         <div class="sidebar">
             <div class="logo-area">
@@ -127,11 +141,11 @@
                         <label>Área:</label>
                         <select name="area" id="area">
                             <option value="">Seleccione área</option>
-                            <option value="Sistemas" <%= editar != null && "Sistemas".equals(editar.getArea()) ? "selected" : "" %>>Recursos Humanos</option>
+                            <option value="Sistemas" <%= editar != null && "Sistemas".equals(editar.getArea()) ? "selected" : "" %>>Sistemas</option>
                             <option value="Soporte TI" <%= editar != null && "Soporte TI".equals(editar.getArea()) ? "selected" : "" %>>Soporte TI</option>
                             <option value="Contabilidad" <%= editar != null && "Contabilidad".equals(editar.getArea()) ? "selected" : "" %>>Contabilidad</option>
-                            <option value="Finanzas" <%= editar != null && "Finanzas".equals(editar.getArea()) ? "selected" : "" %>>Logística</option>
-                            <option value="Operaciones" <%= editar != null && "Operaciones".equals(editar.getArea()) ? "selected" : "" %>>Gerencia</option>
+                            <option value="Finanzas" <%= editar != null && "Finanzas".equals(editar.getArea()) ? "selected" : "" %>>Finanzas</option>
+                            <option value="Operaciones" <%= editar != null && "Operaciones".equals(editar.getArea()) ? "selected" : "" %>>Operaciones</option>
                             <option value="Administración" <%= editar != null && "Administración".equals(editar.getArea()) ? "selected" : "" %>>Administración</option>
                         </select>
                     </div>

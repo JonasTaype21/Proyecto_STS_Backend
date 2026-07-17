@@ -12,6 +12,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><%= esSeguimiento ? "Seguimiento de Tickets" : "Mis Tickets" %></title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
     </head>
@@ -22,59 +23,62 @@
 
             <h1><%= esSeguimiento ? "Seguimiento de Tickets" : "Mis Tickets" %></h1>
 
-            <table class="tabla-historial">
-                <tr>
-                    <th>Código</th>
-                    <th>Categoría</th>
-                    <th>Título</th>
-                    <th>Prioridad</th>
-                    <th>Estado</th>
-                    <th>Técnico</th>
-                    <th>Acciones</th>
-                </tr>
+            <div class="table-wrapper">
 
-                <% if (lista != null) {
+
+                <table class="tabla-historial">
+                    <tr>
+                        <th>Código</th>
+                        <th>Categoría</th>
+                        <th>Título</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Técnico</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                    <% if (lista != null) {
             for (Ticket t : lista) { %>
 
-                <tr>
-                    <td><strong><%= t.getCodigoTicket() %></strong></td>
-                    <td><%= t.getNombreCategoria() %></td>
-                    <td><%= t.getTitulo() %></td>
-                    <td><span class="badge"><%= t.getPrioridad() %></span></td>
-                    <td><span class="estado-activo"><%= t.getEstado() %></span></td>
-                    <td><%= t.getTecnicoAsignado() == null ? "Sin asignar" : t.getTecnicoAsignado() %></td>
-                    <td>
-                        <% if (esSeguimiento) { %>
+                    <tr>
+                        <td><strong><%= t.getCodigoTicket() %></strong></td>
+                        <td><%= t.getNombreCategoria() %></td>
+                        <td><%= t.getTitulo() %></td>
+                        <td><span class="badge"><%= t.getPrioridad() %></span></td>
+                        <td><span class="estado-activo"><%= t.getEstado() %></span></td>
+                        <td><%= t.getTecnicoAsignado() == null ? "Sin asignar" : t.getTecnicoAsignado() %></td>
+                        <td>
+                            <% if (esSeguimiento) { %>
 
-                        <a href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoTicket&id=<%= t.getIdTicket() %>"
-                           target="panelUsuarioFrame">
-                            Ver seguimiento
-                        </a>
+                            <a href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoTicket&id=<%= t.getIdTicket() %>"
+                               target="panelUsuarioFrame">
+                                Ver seguimiento
+                            </a>
 
-                        <% } else { %>
+                            <% } else { %>
 
-                        <a href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>"
-                           target="panelUsuarioFrame">
-                            Detalle
-                        </a>
+                            <a href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>"
+                               target="panelUsuarioFrame">
+                                Detalle
+                            </a>
 
-                        <br>
+                            <br>
 
-                        <a
-                            href="http://localhost:4200/tickets/<%= t.getIdTicket() %>?origen=usuario"
-                            target="_top">
+                            <a
+                                href="http://localhost:4200/tickets/<%= t.getIdTicket() %>?origen=usuario"
+                                target="_top">
 
-                            Seguimiento STS
+                                Seguimiento STS
 
-                        </a>
+                            </a>
 
-                        <% } %>
-                    </td>
-                </tr>
+                            <% } %>
+                        </td>
+                    </tr>
 
-                <% }} %>
-            </table>
-
+                    <% }} %>
+                </table>
+            </div>
         </div>
 
     </body>

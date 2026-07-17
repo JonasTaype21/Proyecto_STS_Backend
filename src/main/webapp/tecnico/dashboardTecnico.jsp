@@ -15,6 +15,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Panel Técnico</title>
 
         <link rel="stylesheet"
@@ -25,6 +26,20 @@
     </head>
 
     <body class="dashboard-body">
+
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
 
         <!-- =========================
              MENÚ LATERAL

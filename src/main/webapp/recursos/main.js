@@ -1,4 +1,95 @@
-    document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
+
+    // =========================
+    // MENÚ LATERAL RESPONSIVE
+    // =========================
+
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+    function abrirMenu() {
+
+        if (!sidebar) {
+            return;
+        }
+
+        sidebar.classList.add("sidebar-open");
+
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.add("overlay-active");
+        }
+
+        if (menuToggle) {
+            menuToggle.setAttribute("aria-expanded", "true");
+        }
+
+        document.body.classList.add("menu-open");
+    }
+
+    function cerrarMenu() {
+
+        if (!sidebar) {
+            return;
+        }
+
+        sidebar.classList.remove("sidebar-open");
+
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.remove("overlay-active");
+        }
+
+        if (menuToggle) {
+            menuToggle.setAttribute("aria-expanded", "false");
+        }
+
+        document.body.classList.remove("menu-open");
+    }
+
+    if (menuToggle && sidebar) {
+
+        menuToggle.addEventListener("click", () => {
+
+            if (sidebar.classList.contains("sidebar-open")) {
+                cerrarMenu();
+            } else {
+                abrirMenu();
+            }
+
+        });
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener("click", cerrarMenu);
+    }
+
+    document.addEventListener("keydown", event => {
+
+        if (event.key === "Escape") {
+            cerrarMenu();
+        }
+
+    });
+
+    document.querySelectorAll(".sidebar .menu-item").forEach(enlace => {
+
+        enlace.addEventListener("click", () => {
+
+            if (window.innerWidth <= 900) {
+                cerrarMenu();
+            }
+
+        });
+
+    });
+
+    window.addEventListener("resize", () => {
+
+        if (window.innerWidth > 900) {
+            cerrarMenu();
+        }
+
+    });
 
     // =========================
     // SOLO NÚMEROS EN TELÉFONO
@@ -9,33 +100,37 @@
         input.addEventListener("input", () => {
 
             input.value = input.value.replace(/\D/g, "");
+
             if (input.value.length > 9) {
                 input.value = input.value.slice(0, 9);
             }
+
         });
+
     });
 
     // =========================
-    // VALIDACIÓN FORMULARIOS
+    // VALIDACIÓN DE FORMULARIOS
     // =========================
 
     document.querySelectorAll("form").forEach(form => {
 
-        form.addEventListener("submit", function (e) {
+        form.addEventListener("submit", function (event) {
 
-            const requireds = form.querySelectorAll("[required]");
+            const camposObligatorios = form.querySelectorAll("[required]");
 
-            for (const campo of requireds) {
+            for (const campo of camposObligatorios) {
 
                 if (!campo.value.trim()) {
 
-                    e.preventDefault();
+                    event.preventDefault();
                     alert("Completa todos los campos obligatorios.");
 
                     campo.focus();
 
                     return;
                 }
+
             }
 
             // VALIDAR TELÉFONO
@@ -45,7 +140,7 @@
 
                 if (telefono.value.length !== 9) {
 
-                    e.preventDefault();
+                    event.preventDefault();
 
                     alert("El teléfono debe tener 9 dígitos.");
 
@@ -53,37 +148,52 @@
 
                     return;
                 }
+
             }
 
-            // DESACTIVAR BOTÓN
+            // EVITAR DOBLE ENVÍO
             const boton = form.querySelector("button[type='submit']");
 
-            if (!form.action.includes("LoginServlet")) {
+            if (
+                    boton &&
+                    !form.action.includes("LoginServlet")
+                    ) {
+
                 boton.disabled = true;
                 boton.innerText = "Procesando...";
+
             }
+
         });
+
     });
 
     // =========================
-    // COLORES POR ESTADO
+    // COLORES POR PRIORIDAD
     // =========================
 
-    document.querySelectorAll("table tr").forEach(row => {
+    document.querySelectorAll("table tr").forEach(fila => {
 
-        const texto = row.innerText.toUpperCase();
+        const texto = fila.innerText.toUpperCase();
 
-        if (texto.includes("CRITICA")) {
-            row.style.backgroundColor = "#fee2e2";
+        if (texto.includes("CRITICA") || texto.includes("CRÍTICA")) {
+
+            fila.style.backgroundColor = "#fee2e2";
+
         } else if (texto.includes("ALTA")) {
-            row.style.backgroundColor = "#fff7ed";
+
+            fila.style.backgroundColor = "#fff7ed";
+
         } else if (texto.includes("MEDIA")) {
-            row.style.backgroundColor = "#fefce8";
+
+            fila.style.backgroundColor = "#fefce8";
+
         } else if (texto.includes("BAJA")) {
-            row.style.backgroundColor = "#ecfdf5";
+
+            fila.style.backgroundColor = "#ecfdf5";
+
         }
+
     });
 
 });
-
-

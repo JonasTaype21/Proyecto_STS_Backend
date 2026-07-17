@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistema de Tickets</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
@@ -52,23 +53,27 @@
                 <div class="login-error">
                     <%= request.getAttribute("error") %>
                 </div>
-            <% } %>
+                <% } %>
 
-            <form action="LoginServlet" method="post" autocomplete="on">
+                <form action="${pageContext.request.contextPath}/LoginServlet"
+                      method="post"
+                      autocomplete="on">
+                    <label>Correo electrónico</label>
+                    <input type="email"
+                           name="correo"
+                           required
+                           autocomplete="email">
 
-                <label>Correo electrónico</label>
-                <input type="email" name="correo" required autocomplete="on">
+                    <label>Contraseña</label>
+                    <input type="password" name="clave" required autocomplete="current-password">
+                    <button type="submit">Iniciar sesión</button>
 
-                <label>Contraseña</label>
-                <input type="password" name="clave" required autocomplete="current-password">
-                <button type="submit">Iniciar sesión</button>
+                </form>
 
-            </form>
-
-            <div class="login-links">
-                <span>¿Olvidaste tu contraseña?</span>
-                <a href="#" onclick="alert('Comuníquese con el administrador del sistema para restablecer su contraseña.'); return false;">
-                    Solicitar ayuda
+                <div class="login-links">
+                    <span>¿Olvidaste tu contraseña?</span>
+                    <a href="#" onclick="alert('Comuníquese con el administrador del sistema para restablecer su contraseña.'); return false;">
+                        Solicitar ayuda
                 </a>
             </div>
 
@@ -78,6 +83,5 @@
 
 </div>
 
-<script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 </body>
 </html>

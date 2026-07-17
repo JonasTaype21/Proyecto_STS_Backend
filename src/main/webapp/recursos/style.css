@@ -1070,40 +1070,540 @@ p[style*="red"] {
 /* =========================
    RESPONSIVE
 ========================= */
+
+/* Tablets y celulares */
 @media (max-width: 900px) {
 
-    body{
-        overflow-x:hidden;
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
     }
 
-    .login-right{
-        padding:20px;
+    /* =====================
+       LOGIN
+    ===================== */
+
+    .login-page {
+        min-height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
-    .login-card{
-        width:100%;
-        max-width:380px;
-        padding:25px;
-        border-radius:15px;
+    .login-container {
+        display: block;
+        width: 100%;
+        min-height: 100dvh;
     }
 
-    .login-card h2{
-        font-size:26px;
+    .login-left {
+        display: none !important;
     }
 
-    .login-card p{
-        font-size:14px;
+    .login-right {
+        width: 100%;
+        min-height: 100dvh;
+        padding: 24px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .input-group input{
-        font-size:16px;
-        padding:14px;
+    .login-card {
+        width: 100%;
+        max-width: 430px;
+        padding: 32px 26px;
+        margin: 0 auto;
+        border-radius: 22px;
     }
 
-    .btn-login{
-        width:100%;
-        padding:14px;
-        font-size:16px;
+    .login-card h2 {
+        font-size: 30px;
     }
 
+    .login-subtitle {
+        margin-bottom: 26px;
+    }
+
+    .login-card input {
+        height: 50px;
+        font-size: 16px;
+    }
+
+    .login-card button {
+        min-height: 50px;
+        font-size: 16px;
+    }
+
+    /* =====================
+       DASHBOARD
+    ===================== */
+
+    .dashboard-body {
+        display: block;
+        width: 100%;
+        min-height: 100dvh;
+    }
+
+    /*
+       En móvil ocultamos el menú lateral.
+       Más adelante se puede convertir en menú hamburguesa.
+    */
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+        padding: 20px 16px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .topbar h1 {
+        font-size: 25px;
+    }
+
+    .topbar p {
+        margin-bottom: 0;
+    }
+
+    .user-badge {
+        align-self: flex-start;
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .card-dashboard {
+        min-width: 0;
+        padding: 20px;
+    }
+
+    .card-dashboard h3,
+    .card-dashboard p {
+        overflow-wrap: anywhere;
+    }
+
+    .section-panel {
+        margin-top: 22px;
+        padding: 20px;
+    }
+
+    .quick-actions,
+    .form-actions,
+    .toolbar {
+        width: 100%;
+    }
+
+    /* =====================
+       FORMULARIOS
+    ===================== */
+
+    form {
+        padding: 20px;
+    }
+
+    .form-grid,
+    .ticket-detail-grid,
+    .detalle-tecnico-grid,
+    .detalle-atencion-grid,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+
+    /* =====================
+       TABLAS
+    ===================== */
+
+    .table-wrapper,
+    .tabla-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 900px;
+    }
+
+    .tabla-tickets-admin {
+        min-width: 1050px;
+    }
+
+    /* =====================
+       IFRAME
+    ===================== */
+
+    .panel-frame {
+        height: 72vh;
+        min-height: 520px;
+    }
+
+    .iframe-content {
+        padding: 18px;
+    }
+
+    .iframe-content table {
+        min-width: 900px;
+    }
+
+    /* =====================
+       DETALLES
+    ===================== */
+
+    .ticket-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ticket-detail-header h1 {
+        font-size: 25px;
+    }
+
+    .timeline-head {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .timeline-head span {
+        white-space: normal;
+    }
+
+    /* =====================
+       MODAL
+    ===================== */
+
+    .modal-cierre {
+        padding: 18px;
+    }
+
+    .modal-cierre-content {
+        width: 100%;
+        max-width: 430px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 14px 12px;
+    }
+
+    .topbar {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .topbar h1 {
+        font-size: 22px;
+    }
+
+    .topbar p {
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .card-dashboard {
+        min-height: 112px;
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .card-icon {
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
+        border-radius: 16px;
+    }
+
+    .section-panel {
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .quick-actions,
+    .form-actions,
+    .toolbar,
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-panel,
+    .quick-actions a,
+    .quick-actions button,
+    .form-actions a,
+    .form-actions button,
+    .toolbar a,
+    .toolbar button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    form {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .detalle-card {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .info-grid {
+        gap: 12px;
+    }
+
+    .info-grid div {
+        padding: 13px;
+    }
+
+    .iframe-content {
+        padding: 14px;
+    }
+
+    .iframe-content h1 {
+        font-size: 22px;
+    }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+
+    .login-right {
+        padding: 16px 12px;
+        align-items: center;
+    }
+
+    .login-card {
+        max-width: none;
+        padding: 26px 20px;
+        border-radius: 20px;
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+    }
+
+    .login-card h2 {
+        font-size: 27px;
+    }
+
+    .login-subtitle {
+        font-size: 14px;
+        line-height: 1.45;
+        margin: 8px 0 24px;
+    }
+
+    .login-card label {
+        font-size: 13px;
+    }
+
+    .login-card input {
+        margin-bottom: 18px;
+    }
+
+    .login-links {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .main-content {
+        padding: 12px 10px;
+    }
+
+    .topbar {
+        padding: 16px;
+    }
+
+    .topbar h1 {
+        font-size: 21px;
+    }
+
+    .user-badge {
+        padding: 9px 13px;
+        font-size: 12px;
+    }
+
+    .card-dashboard {
+        gap: 14px;
+    }
+
+    .section-panel {
+        padding: 16px;
+    }
+
+    .section-header h2 {
+        font-size: 20px;
+    }
+
+    table th,
+    table td {
+        padding: 13px 14px;
+    }
+
+    .modal-cierre-content {
+        padding: 20px;
+        border-radius: 18px;
+    }
+}
+
+
+/* =========================
+   MENÚ MÓVIL Y PÁGINAS DE ESTADO
+========================= */
+
+.menu-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border-radius: 13px;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1300;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22);
+}
+
+.menu-toggle i {
+    font-size: 18px;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.52);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+    z-index: 1150;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.error-page {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 35%),
+        linear-gradient(135deg, #eef4ff, #f8fafc);
+}
+
+.error-card {
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    border: 1px solid var(--gris-borde);
+    border-radius: 22px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: var(--sombra);
+}
+
+.error-card h2 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 28px;
+}
+
+.error-card p {
+    color: var(--gris-texto);
+    margin-bottom: 22px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Botón secundario */
+.btn-panel.secundario {
+    background: #e2e8f0;
+    color: #0f172a;
+    box-shadow: none;
+}
+
+.btn-panel.secundario:hover {
+    background: #cbd5e1;
+    color: #0f172a;
+}
+
+/* Ajuste para que el contenido no quede debajo del botón móvil */
+@media (max-width: 900px) {
+
+    .menu-toggle {
+        display: inline-flex;
+    }
+
+    .sidebar {
+        display: flex !important;
+        width: 265px;
+        height: 100dvh;
+        left: -285px;
+        top: 0;
+        z-index: 1200;
+        transition: left .28s ease;
+        overflow-y: auto;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main-content {
+        padding-top: 76px;
+    }
+
+    body.menu-open {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-toggle {
+        top: 10px;
+        left: 10px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .main-content {
+        padding-top: 66px;
+    }
+
+    .error-card {
+        padding: 25px 20px;
+        border-radius: 18px;
+    }
 }
