@@ -1070,61 +1070,40 @@ p[style*="red"] {
 /* =========================
    RESPONSIVE
 ========================= */
+@media (max-width: 900px) {
 
-@media(max-width:900px) {
-    .login-container {
-        grid-template-columns: 1fr;
+    body{
+        overflow-x:hidden;
     }
 
-    .login-left {
-        display: none;
+    .login-right{
+        padding:20px;
     }
 
-    .login-right {
-        min-height: 100vh;
-        padding: 28px;
+    .login-card{
+        width:100%;
+        max-width:380px;
+        padding:25px;
+        border-radius:15px;
     }
 
-    .login-card {
-        width: 100%;
-        max-width: 430px;
-        padding: 32px;
+    .login-card h2{
+        font-size:26px;
     }
 
-    .sidebar {
-        display: none;
+    .login-card p{
+        font-size:14px;
     }
 
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 20px;
+    .input-group input{
+        font-size:16px;
+        padding:14px;
     }
 
-    .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+    .btn-login{
+        width:100%;
+        padding:14px;
+        font-size:16px;
     }
 
-    .form-grid,
-    .ticket-detail-grid,
-    .detalle-tecnico-grid,
-    .detalle-atencion-grid,
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .table-wrapper,
-    .tabla-container,
-    table {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 900px;
-        white-space: nowrap;
-    }
 }
