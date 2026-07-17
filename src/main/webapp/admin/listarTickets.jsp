@@ -19,6 +19,8 @@
 
     String asignado =
             request.getParameter("asignado");
+    
+    String angularBaseUrl = "https://sts-angular.onrender.com";
 %>
 
 <!DOCTYPE html>
@@ -316,7 +318,7 @@
 
                                     </span>
 
-                                    <% } %>
+                                        <% } %>
 
                                 </td>
 
@@ -324,29 +326,31 @@
 
                                     <div class="table-actions">
 
-                                        <!-- VER DETALLE -->
                                         <a class="action-link detalle"
                                            href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>"
                                            title="Ver detalle del ticket">
 
                                             <i class="fa-solid fa-eye"></i>
-
                                             Detalle
-
                                         </a>
 
-                                        <!-- ASIGNAR TÉCNICO -->
+                                        <a class="action-link detalle"
+                                           href="<%= angularBaseUrl %>/tickets/<%= t.getIdTicket() %>?origen=admin"
+                                           title="Abrir seguimiento avanzado">
+
+                                            <i class="fa-solid fa-clock-rotate-left"></i>
+                                            Seguimiento STS
+                                        </a>
+
                                         <% if ("ABIERTO".equals(t.getEstado())
-                                                || "REABIERTO".equals(t.getEstado())) { %>
+                                         || "REABIERTO".equals(t.getEstado())) { %>
 
                                         <a class="action-link asignar"
                                            href="${pageContext.request.contextPath}/TicketServlet?accion=asignar&id=<%= t.getIdTicket() %>"
                                            title="Asignar técnico">
 
                                             <i class="fa-solid fa-user-plus"></i>
-
                                             Asignar
-
                                         </a>
 
                                         <% } %>

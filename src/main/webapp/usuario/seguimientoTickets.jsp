@@ -17,6 +17,8 @@
 
     SimpleDateFormat formatoFecha
             = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+    String angularBaseUrl = "http://localhost:4200";
 %>
 
 <!DOCTYPE html>
@@ -232,32 +234,43 @@
 
                                 </td>
 
-                                <td>
+                                <td data-label="Acción">
+
                                     <div class="table-actions">
 
-                                        <% if ("RESUELTO".equalsIgnoreCase(ticket.getEstadoActual())) { %>
+                                        <% if ("RESUELTO".equalsIgnoreCase(h.getEstadoActual())) { %>
 
                                         <button type="button"
                                                 class="btn-table"
                                                 onclick="abrirModalCierre(
-                        '<%= ticket.getIdTicket() %>',
-                        '<%= ticket.getCodigoTicket() %>'
-                    )">
-                                            <i class="fas fa-check-circle"></i>
+                                                                '<%= h.getIdTicket() %>',
+                                                                '<%= h.getCodigoTicket() %>'
+                                                                )">
+
+                                            <i class="fa-solid fa-check"></i>
                                             Cerrar ticket
                                         </button>
+
+                                        <% } else if ("CERRADO".equalsIgnoreCase(h.getEstadoActual())) { %>
+
+                                        <span class="texto-cerrado">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            Cerrado
+                                        </span>
 
                                         <% } else { %>
 
                                         <a class="btn-table secundario"
-                                           href="<%= request.getContextPath() %>/SeguimientoTicketServlet?accion=detalle&id=<%= ticket.getIdTicket() %>">
-                                            <i class="fas fa-eye"></i>
+                                           href="<%= angularBaseUrl %>/tickets/<%= h.getIdTicket() %>?origen=usuario">
+
+                                            <i class="fa-solid fa-eye"></i>
                                             Ver seguimiento
                                         </a>
 
                                         <% } %>
 
                                     </div>
+
                                 </td>
 
                             </tr>

@@ -13,6 +13,8 @@
 
     List<Ticket> lista
             = (List<Ticket>) request.getAttribute("listaTickets");
+    
+    String angularBaseUrl = "https://sts-angular.onrender.com";
 %>
 
 <!DOCTYPE html>
@@ -181,8 +183,15 @@
                                             Detalle
                                         </a>
 
+                                        <a class="btn-table secundario"
+                                           href="<%= angularBaseUrl %>/tickets/<%= t.getIdTicket() %>?origen=tecnico">
+
+                                            <i class="fa-solid fa-diagram-project"></i>
+                                            Centro STS
+                                        </a>
+
                                         <% if ("ASIGNADO".equals(t.getEstado())
-                                                    || "EN_PROCESO".equals(t.getEstado())) { %>
+            || "EN_PROCESO".equals(t.getEstado())) { %>
 
                                         <a class="btn-table"
                                            href="${pageContext.request.contextPath}/TicketServlet?accion=atender&id=<%= t.getIdTicket() %>">
