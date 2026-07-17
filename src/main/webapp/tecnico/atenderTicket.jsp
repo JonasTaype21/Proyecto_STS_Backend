@@ -1,51 +1,158 @@
 <%@page import="bean.Ticket"%>
+<%@page import="bean.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    Ticket ticket = (Ticket) request.getAttribute("ticket");
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    Ticket ticket
+            = (Ticket) request.getAttribute("ticket");
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+
         <title>Atender Ticket</title>
 
         <link rel="stylesheet"
               href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
+
         <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
 
-    <body class="iframe-body">
+    <body class="dashboard-body">
 
-        <div class="iframe-content">
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
 
-            <% if (ticket == null) { %>
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-            <div class="detalle-card">
-                <h2>Ticket no encontrado</h2>
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
 
-                <a class="btn-panel"
-                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados"
-                   target="_self">
-                    Volver a tickets
-                </a>
+        <aside class="sidebar">
+
+            <div class="logo-area">
+                <h2>STS</h2>
+                <span>Soporte TI</span>
             </div>
 
-            <% } else { %>
+            <div class="menu-title">
+                MENÚ TÉCNICO
+            </div>
 
-            <div class="ticket-detail-header">
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp">
+
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="menu-item active"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>Tickets asignados</span>
+            </a>
+
+            <a class="menu-item logout"
+               href="${pageContext.request.contextPath}/LogoutServlet">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <div class="topbar">
 
                 <div>
                     <h1>Atender Ticket</h1>
 
                     <p>
-                        <%= ticket.getCodigoTicket() %>
-                        -
-                        <%= ticket.getTitulo() %>
+                        Inicia la atención o registra la solución técnica.
                     </p>
+                </div>
+
+                <div class="user-badge">
+                    TÉCNICO
+                </div>
+
+            </div>
+
+            <% if (ticket == null) { %>
+
+            <section class="detalle-card">
+
+                <div class="estado-vacio">
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    <h2>Ticket no encontrado</h2>
+
+                    <p>
+                        No fue posible cargar el ticket seleccionado.
+                    </p>
+
+                    <a class="btn-panel"
+                       href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Volver a tickets
+                    </a>
+
+                </div>
+
+            </section>
+
+            <% } else { %>
+
+            <div class="page-actions">
+
+                <a class="btn-panel secundario"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Volver a tickets
+                </a>
+
+                <a class="btn-panel secundario"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= ticket.getIdTicket() %>">
+
+                    <i class="fa-solid fa-eye"></i>
+                    Ver detalle
+                </a>
+
+            </div>
+
+            <div class="ticket-detail-header detalle-card-header">
+
+                <div>
+                    <span class="ticket-codigo">
+                        <%= ticket.getCodigoTicket() %>
+                    </span>
+
+                    <h1>
+                        <%= ticket.getTitulo() %>
+                    </h1>
                 </div>
 
                 <span class="estado-activo">
@@ -56,152 +163,206 @@
 
             <% if (request.getAttribute("error") != null) { %>
 
-            <p style="color:red;">
-                <%= request.getAttribute("error") %>
-            </p>
+            <div class="mensaje-error">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <span>
+                    <%= request.getAttribute("error") %>
+                </span>
+
+            </div>
 
             <% } %>
 
             <% if ("ASIGNADO".equals(ticket.getEstado())) { %>
 
-            <!-- DOS COLUMNAS EN LA ETAPA INICIAL -->
             <div class="detalle-atencion-grid">
 
                 <div>
 
-                    <div class="detalle-card">
+                    <section class="detalle-card">
 
-                        <h2>Información del ticket</h2>
+                        <h2>
+                            <i class="fa-solid fa-circle-info"></i>
+                            Información del ticket
+                        </h2>
 
                         <div class="info-grid">
 
                             <div>
                                 <span>Usuario</span>
-                                <strong><%= ticket.getUsuarioReporta() %></strong>
+
+                                <strong>
+                                    <%= ticket.getUsuarioReporta() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Categoría</span>
-                                <strong><%= ticket.getNombreCategoria() %></strong>
+
+                                <strong>
+                                    <%= ticket.getNombreCategoria() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Prioridad</span>
-                                <strong><%= ticket.getPrioridad() %></strong>
+
+                                <strong>
+                                    <span class="badge prioridad-<%= ticket.getPrioridad().toLowerCase() %>">
+                                        <%= ticket.getPrioridad() %>
+                                    </span>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Estado</span>
-                                <strong><%= ticket.getEstado() %></strong>
+
+                                <strong>
+                                    <%= ticket.getEstado() %>
+                                </strong>
                             </div>
 
                         </div>
 
-                    </div>
+                    </section>
 
-                </div>
+                    <section class="detalle-card">
 
-                <div>
+                        <h2>
+                            <i class="fa-solid fa-file-lines"></i>
+                            Descripción del problema
+                        </h2>
 
-                    <div class="detalle-card">
-
-                        <h2>Descripción del problema</h2>
-
-                        <p><%= ticket.getDescripcion() %></p>
-
-                    </div>
-
-                    <div class="detalle-card">
-
-                        <h2>Iniciar atención técnica</h2>
-
-                        <p>
-                            Al iniciar, el ticket cambiará de
-                            <strong>ASIGNADO</strong> a
-                            <strong>EN_PROCESO</strong>.
+                        <p class="texto-detalle">
+                            <%= ticket.getDescripcion() %>
                         </p>
 
-                        <form action="${pageContext.request.contextPath}/TicketServlet"
-                              method="post">
-
-                            <input type="hidden"
-                                   name="accion"
-                                   value="iniciar">
-
-                            <input type="hidden"
-                                   name="idTicket"
-                                   value="<%= ticket.getIdTicket() %>">
-
-                            <button type="submit"
-                                    onclick="return confirm('¿Deseas iniciar la atención?');">
-                                Iniciar atención
-                            </button>
-
-                        </form>
-
-                    </div>
+                    </section>
 
                 </div>
+
+                <section class="detalle-card">
+
+                    <h2>
+                        <i class="fa-solid fa-play"></i>
+                        Iniciar atención técnica
+                    </h2>
+
+                    <p>
+                        Al iniciar la atención, el ticket cambiará de
+                        <strong>ASIGNADO</strong> a
+                        <strong>EN_PROCESO</strong>.
+                    </p>
+
+                    <form action="${pageContext.request.contextPath}/TicketServlet"
+                          method="post"
+                          class="form-atencion">
+
+                        <input type="hidden"
+                               name="accion"
+                               value="iniciar">
+
+                        <input type="hidden"
+                               name="idTicket"
+                               value="<%= ticket.getIdTicket() %>">
+
+                        <button type="submit"
+                                onclick="return confirm('¿Deseas iniciar la atención de este ticket?');">
+
+                            <i class="fa-solid fa-play"></i>
+                            Iniciar atención
+                        </button>
+
+                    </form>
+
+                </section>
 
             </div>
 
             <% } else if ("EN_PROCESO".equals(ticket.getEstado())) { %>
 
-            <!-- IZQUIERDA INFORMACIÓN / DERECHA SOLUCIÓN -->
             <div class="detalle-atencion-grid">
 
                 <div>
 
-                    <div class="detalle-card">
+                    <section class="detalle-card">
 
-                        <h2>Información del ticket</h2>
+                        <h2>
+                            <i class="fa-solid fa-circle-info"></i>
+                            Información del ticket
+                        </h2>
 
                         <div class="info-grid">
 
                             <div>
                                 <span>Usuario</span>
-                                <strong><%= ticket.getUsuarioReporta() %></strong>
+
+                                <strong>
+                                    <%= ticket.getUsuarioReporta() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Categoría</span>
-                                <strong><%= ticket.getNombreCategoria() %></strong>
+
+                                <strong>
+                                    <%= ticket.getNombreCategoria() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Prioridad</span>
-                                <strong><%= ticket.getPrioridad() %></strong>
+
+                                <strong>
+                                    <span class="badge prioridad-<%= ticket.getPrioridad().toLowerCase() %>">
+                                        <%= ticket.getPrioridad() %>
+                                    </span>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Estado</span>
-                                <strong><%= ticket.getEstado() %></strong>
+
+                                <strong>
+                                    <%= ticket.getEstado() %>
+                                </strong>
                             </div>
 
                         </div>
 
-                    </div>
+                    </section>
 
-                    <div class="detalle-card">
+                    <section class="detalle-card">
 
-                        <h2>Descripción del problema</h2>
+                        <h2>
+                            <i class="fa-solid fa-file-lines"></i>
+                            Descripción del problema
+                        </h2>
 
-                        <p><%= ticket.getDescripcion() %></p>
+                        <p class="texto-detalle">
+                            <%= ticket.getDescripcion() %>
+                        </p>
 
-                    </div>
+                    </section>
 
                 </div>
 
-                <div class="detalle-card">
+                <section class="detalle-card">
 
-                    <h2>Registrar solución</h2>
+                    <h2>
+                        <i class="fa-solid fa-clipboard-check"></i>
+                        Registrar solución
+                    </h2>
 
                     <p>
-                        Registra el diagnóstico y la solución aplicada.
+                        Registra el diagnóstico y la solución aplicada al ticket.
                     </p>
 
                     <form action="${pageContext.request.contextPath}/TicketServlet"
-                          method="post">
+                          method="post"
+                          class="form-atencion">
 
                         <input type="hidden"
                                name="accion"
@@ -211,27 +372,41 @@
                                name="idTicket"
                                value="<%= ticket.getIdTicket() %>">
 
-                        <label>Diagnóstico:</label>
+                        <label for="diagnostico">
+                            Diagnóstico
+                        </label>
 
-                        <textarea name="diagnostico"
+                        <textarea id="diagnostico"
+                                  name="diagnostico"
                                   rows="4"
+                                  placeholder="Describe la causa identificada del problema"
                                   required></textarea>
 
-                        <label>Solución aplicada:</label>
+                        <label for="solucionAplicada">
+                            Solución aplicada
+                        </label>
 
-                        <textarea name="solucionAplicada"
+                        <textarea id="solucionAplicada"
+                                  name="solucionAplicada"
                                   rows="4"
+                                  placeholder="Describe las acciones realizadas para resolverlo"
                                   required></textarea>
 
-                        <label>Observaciones:</label>
+                        <label for="observaciones">
+                            Observaciones
+                        </label>
 
-                        <textarea name="observaciones"
-                                  rows="3"></textarea>
+                        <textarea id="observaciones"
+                                  name="observaciones"
+                                  rows="3"
+                                  placeholder="Información adicional opcional"></textarea>
 
                         <div class="form-actions">
 
                             <button type="submit"
-                                    onclick="return confirm('¿Deseas registrar la solución?');">
+                                    onclick="return confirm('¿Deseas registrar esta solución?');">
+
+                                <i class="fa-solid fa-floppy-disk"></i>
                                 Registrar solución
                             </button>
 
@@ -239,25 +414,41 @@
 
                     </form>
 
+                </section>
+
+            </div>
+
+            <% } else { %>
+
+            <section class="detalle-card">
+
+                <div class="estado-vacio">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    <h2>El ticket ya no requiere atención</h2>
+
+                    <p>
+                        El estado actual del ticket es
+                        <strong><%= ticket.getEstado() %></strong>.
+                    </p>
+
+                    <a class="btn-panel"
+                       href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= ticket.getIdTicket() %>">
+
+                        <i class="fa-solid fa-eye"></i>
+                        Consultar detalle
+                    </a>
+
                 </div>
 
-            </div>
+            </section>
 
             <% } %>
 
-            <div class="detalle-card">
-
-                <a href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados"
-                   class="btn-panel">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    Volver a tickets
-                </a>
-
-            </div>
-
             <% } %>
 
-        </div>
+        </main>
 
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 

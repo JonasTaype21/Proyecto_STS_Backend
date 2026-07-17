@@ -11,7 +11,7 @@
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
 
@@ -37,16 +37,15 @@
                 aria-expanded="false">
 
             <i class="fa-solid fa-bars"></i>
-
         </button>
 
-        <!-- FONDO OSCURO DEL MENÚ -->
+        <!-- FONDO OSCURO -->
         <div class="sidebar-overlay"
              id="sidebarOverlay">
         </div>
 
         <!-- MENÚ LATERAL -->
-        <div class="sidebar">
+        <aside class="sidebar">
 
             <div class="logo-area">
                 <h2>STS</h2>
@@ -61,50 +60,49 @@
                href="${pageContext.request.contextPath}/usuario/dashboardUsuario.jsp">
 
                 <i class="fa-solid fa-house"></i>
-                Dashboard
+                <span>Dashboard</span>
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/TicketServlet?accion=nuevo">
 
                 <i class="fa-solid fa-circle-plus"></i>
-                Nueva solicitud
+                <span>Nueva solicitud</span>
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/TicketServlet?accion=misTickets">
 
                 <i class="fa-solid fa-ticket"></i>
-                Mis tickets
+                <span>Mis tickets</span>
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoUsuario">
 
                 <i class="fa-solid fa-clock-rotate-left"></i>
-                Seguimiento de tickets
+                <span>Seguimiento de tickets</span>
             </a>
 
             <a class="menu-item logout"
                href="${pageContext.request.contextPath}/LogoutServlet">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
-                Cerrar sesión
+                <span>Cerrar sesión</span>
             </a>
 
-        </div>
+        </aside>
 
         <!-- CONTENIDO PRINCIPAL -->
-        <div class="main-content">
+        <main class="main-content">
 
-            <!-- CABECERA -->
             <div class="topbar">
 
                 <div>
                     <h1>Panel Usuario</h1>
 
                     <p>
-                        Bienvenido al panel de usuario,
+                        Bienvenido,
                         <strong>
                             <%= usuario.getNombres() %>
                             <%= usuario.getApellidos() %>
@@ -118,10 +116,11 @@
 
             </div>
 
-            <!-- TARJETAS -->
+            <!-- TARJETAS PRINCIPALES -->
             <div class="cards-container">
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-dashboard-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=nuevo">
 
                     <div class="card-icon azul">
                         <i class="fa-solid fa-circle-plus"></i>
@@ -135,9 +134,11 @@
                         </p>
                     </div>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right card-arrow"></i>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-dashboard-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=misTickets">
 
                     <div class="card-icon verde">
                         <i class="fa-solid fa-ticket"></i>
@@ -151,9 +152,11 @@
                         </p>
                     </div>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right card-arrow"></i>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-dashboard-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoUsuario">
 
                     <div class="card-icon naranja">
                         <i class="fa-solid fa-clock-rotate-left"></i>
@@ -167,12 +170,13 @@
                         </p>
                     </div>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right card-arrow"></i>
+                </a>
 
             </div>
 
             <!-- ACCESOS RÁPIDOS -->
-            <div class="section-panel">
+            <section class="section-panel quick-access-panel">
 
                 <div class="section-header">
                     <h2>Accesos rápidos</h2>
@@ -203,9 +207,9 @@
 
                 </div>
 
-            </div>
+            </section>
 
-        </div>
+        </main>
 
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 

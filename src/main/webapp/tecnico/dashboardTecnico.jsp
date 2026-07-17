@@ -11,7 +11,7 @@
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
 
@@ -29,7 +29,6 @@
 
     <body class="dashboard-body">
 
-        <!-- BOTÓN MENÚ MÓVIL -->
         <button type="button"
                 class="menu-toggle"
                 id="menuToggle"
@@ -37,16 +36,13 @@
                 aria-expanded="false">
 
             <i class="fa-solid fa-bars"></i>
-
         </button>
 
-        <!-- FONDO OSCURO DEL MENÚ -->
         <div class="sidebar-overlay"
              id="sidebarOverlay">
         </div>
 
-        <!-- MENÚ LATERAL -->
-        <div class="sidebar">
+        <aside class="sidebar">
 
             <div class="logo-area">
                 <h2>STS</h2>
@@ -61,29 +57,27 @@
                href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp">
 
                 <i class="fa-solid fa-house"></i>
-                Dashboard
+                <span>Dashboard</span>
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
 
                 <i class="fa-solid fa-screwdriver-wrench"></i>
-                Tickets asignados
+                <span>Tickets asignados</span>
             </a>
 
             <a class="menu-item logout"
                href="${pageContext.request.contextPath}/LogoutServlet">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
-                Cerrar sesión
+                <span>Cerrar sesión</span>
             </a>
 
-        </div>
+        </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <div class="main-content">
+        <main class="main-content">
 
-            <!-- CABECERA -->
             <div class="topbar">
 
                 <div>
@@ -104,10 +98,10 @@
 
             </div>
 
-            <!-- TARJETAS -->
             <div class="cards-container">
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-dashboard-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
 
                     <div class="card-icon azul">
                         <i class="fa-solid fa-ticket"></i>
@@ -115,12 +109,17 @@
 
                     <div>
                         <h3>Tickets asignados</h3>
-                        <p>Consulta las incidencias asignadas para atención.</p>
+
+                        <p>
+                            Consulta las incidencias que requieren atención.
+                        </p>
                     </div>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right card-arrow"></i>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-dashboard-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
 
                     <div class="card-icon verde">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -128,12 +127,17 @@
 
                     <div>
                         <h3>Atención técnica</h3>
-                        <p>Inicia atención, registra diagnóstico y solución.</p>
+
+                        <p>
+                            Inicia la atención y registra el diagnóstico.
+                        </p>
                     </div>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right card-arrow"></i>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-dashboard-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
 
                     <div class="card-icon naranja">
                         <i class="fa-solid fa-clipboard-check"></i>
@@ -141,15 +145,18 @@
 
                     <div>
                         <h3>Soluciones</h3>
-                        <p>Deja constancia del trabajo realizado en cada ticket.</p>
+
+                        <p>
+                            Registra la solución aplicada en cada ticket.
+                        </p>
                     </div>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right card-arrow"></i>
+                </a>
 
             </div>
 
-            <!-- ACCESOS RÁPIDOS -->
-            <div class="section-panel">
+            <section class="section-panel quick-access-panel">
 
                 <div class="section-header">
                     <h2>Accesos rápidos</h2>
@@ -166,9 +173,9 @@
 
                 </div>
 
-            </div>
+            </section>
 
-        </div>
+        </main>
 
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 

@@ -1,85 +1,258 @@
 <%@page import="java.util.List"%>
 <%@page import="bean.Ticket"%>
+<%@page import="bean.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    List<Ticket> lista = (List<Ticket>) request.getAttribute("listaTickets");
-    String modo = request.getParameter("modo");
-    boolean esSeguimiento = "seguimiento".equals(modo);
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    List<Ticket> lista
+            = (List<Ticket>) request.getAttribute("listaTickets");
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><%= esSeguimiento ? "Seguimiento de Tickets" : "Mis Tickets" %></title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
+
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+
+        <title>Mis Tickets</title>
+
+        <link rel="stylesheet"
+              href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
+
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
 
-    <body class="iframe-body">
+    <body class="dashboard-body">
 
-        <div class="iframe-content">
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
 
-            <h1><%= esSeguimiento ? "Seguimiento de Tickets" : "Mis Tickets" %></h1>
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-            <div class="table-wrapper">
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
 
+        <aside class="sidebar">
 
-                <table class="tabla-historial">
-                    <tr>
-                        <th>Código</th>
-                        <th>Categoría</th>
-                        <th>Título</th>
-                        <th>Prioridad</th>
-                        <th>Estado</th>
-                        <th>Técnico</th>
-                        <th>Acciones</th>
-                    </tr>
+            <div class="logo-area">
+                <h2>STS</h2>
+                <span>Soporte TI</span>
+            </div>
 
-                    <% if (lista != null) {
-            for (Ticket t : lista) { %>
+            <div class="menu-title">
+                MENÚ USUARIO
+            </div>
 
-                    <tr>
-                        <td><strong><%= t.getCodigoTicket() %></strong></td>
-                        <td><%= t.getNombreCategoria() %></td>
-                        <td><%= t.getTitulo() %></td>
-                        <td><span class="badge"><%= t.getPrioridad() %></span></td>
-                        <td><span class="estado-activo"><%= t.getEstado() %></span></td>
-                        <td><%= t.getTecnicoAsignado() == null ? "Sin asignar" : t.getTecnicoAsignado() %></td>
-                        <td>
-                            <% if (esSeguimiento) { %>
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/usuario/dashboardUsuario.jsp">
 
-                            <a href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoTicket&id=<%= t.getIdTicket() %>"
-                               target="panelUsuarioFrame">
-                                Ver seguimiento
-                            </a>
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
 
-                            <% } else { %>
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=nuevo">
 
-                            <a href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>"
-                               target="panelUsuarioFrame">
-                                Detalle
-                            </a>
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Nueva solicitud</span>
+            </a>
 
-                            <br>
+            <a class="menu-item active"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=misTickets">
 
-                            <a
-                                href="http://localhost:4200/tickets/<%= t.getIdTicket() %>?origen=usuario"
-                                target="_top">
+                <i class="fa-solid fa-ticket"></i>
+                <span>Mis tickets</span>
+            </a>
 
-                                Seguimiento STS
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoUsuario">
 
-                            </a>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Seguimiento de tickets</span>
+            </a>
+
+            <a class="menu-item logout"
+               href="${pageContext.request.contextPath}/LogoutServlet">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <div class="topbar">
+
+                <div>
+                    <h1>Mis Tickets</h1>
+
+                    <p>
+                        Consulta todas las solicitudes de soporte que registraste.
+                    </p>
+                </div>
+
+                <div class="user-badge">
+                    USUARIO
+                </div>
+
+            </div>
+
+            <section class="section-panel">
+
+                <div class="section-header section-header-actions">
+
+                    <div>
+                        <h2>Solicitudes registradas</h2>
+
+                        <p>
+                            Selecciona un ticket para visualizar sus detalles.
+                        </p>
+                    </div>
+
+                    <a class="btn-panel"
+                       href="${pageContext.request.contextPath}/TicketServlet?accion=nuevo">
+
+                        <i class="fa-solid fa-circle-plus"></i>
+                        Nueva solicitud
+                    </a>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table class="tabla-historial">
+
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Categoría</th>
+                                <th>Título</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Técnico</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <% if (lista != null && !lista.isEmpty()) {
+
+                                    for (Ticket t : lista) {
+                            %>
+
+                            <tr>
+
+                                <td data-label="Código">
+                                    <strong>
+                                        <%= t.getCodigoTicket() %>
+                                    </strong>
+                                </td>
+
+                                <td data-label="Categoría">
+                                    <%= t.getNombreCategoria() %>
+                                </td>
+
+                                <td data-label="Título">
+                                    <%= t.getTitulo() %>
+                                </td>
+
+                                <td data-label="Prioridad">
+                                    <span class="badge prioridad-<%= t.getPrioridad().toLowerCase() %>">
+                                        <%= t.getPrioridad() %>
+                                    </span>
+                                </td>
+
+                                <td data-label="Estado">
+                                    <span class="estado-activo">
+                                        <%= t.getEstado() %>
+                                    </span>
+                                </td>
+
+                                <td data-label="Técnico">
+
+                                    <%= t.getTecnicoAsignado() == null
+                                            ? "Sin asignar"
+                                            : t.getTecnicoAsignado() %>
+
+                                </td>
+
+                                <td data-label="Acciones">
+
+                                    <div class="table-actions">
+
+                                        <a class="btn-table"
+                                           href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>">
+
+                                            <i class="fa-solid fa-eye"></i>
+                                            Detalle
+                                        </a>
+
+                                        <a class="btn-table secundario"
+                                           href="${pageContext.request.contextPath}/TicketServlet?accion=seguimientoTicket&id=<%= t.getIdTicket() %>&seguimiento=si">
+
+                                            <i class="fa-solid fa-clock-rotate-left"></i>
+                                            Seguimiento
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            <%      }
+                                } else {
+                            %>
+
+                            <tr>
+                                <td colspan="7"
+                                    class="tabla-vacia">
+
+                                    <i class="fa-solid fa-inbox"></i>
+
+                                    <p>
+                                        Todavía no tienes tickets registrados.
+                                    </p>
+
+                                    <a class="btn-panel"
+                                       href="${pageContext.request.contextPath}/TicketServlet?accion=nuevo">
+
+                                        Registrar primera solicitud
+                                    </a>
+
+                                </td>
+                            </tr>
 
                             <% } %>
-                        </td>
-                    </tr>
 
-                    <% }} %>
-                </table>
-            </div>
-        </div>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 
     </body>
 </html>

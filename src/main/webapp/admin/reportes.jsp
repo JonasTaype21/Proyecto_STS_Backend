@@ -1,10 +1,23 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
+<%@page import="bean.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
+    Usuario usuarioSesion =
+            (Usuario) session.getAttribute("usuario");
+
+    if (usuarioSesion == null) {
+        response.sendRedirect(
+                request.getContextPath() + "/login.jsp"
+        );
+
+        return;
+    }
+
     List<Map<String, Object>> reporte =
-            (List<Map<String, Object>>) request.getAttribute("reporteTiempos");
+            (List<Map<String, Object>>)
+                    request.getAttribute("reporteTiempos");
 %>
 
 <!DOCTYPE html>
@@ -37,7 +50,7 @@
 
         </button>
 
-        <!-- FONDO OSCURO DEL MENÚ MÓVIL -->
+        <!-- FONDO OSCURO DEL MENÚ -->
         <div class="sidebar-overlay"
              id="sidebarOverlay">
         </div>
@@ -46,8 +59,13 @@
         <div class="sidebar">
 
             <div class="logo-area">
+
                 <h2>STS</h2>
-                <span>Soporte TI</span>
+
+                <span>
+                    Soporte TI
+                </span>
+
             </div>
 
             <div class="menu-title">
@@ -58,42 +76,54 @@
                href="${pageContext.request.contextPath}/admin/dashboardAdmin.jsp">
 
                 <i class="fa-solid fa-chart-line"></i>
+
                 Dashboard
+
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/TicketServlet?accion=listar">
 
                 <i class="fa-solid fa-ticket"></i>
+
                 Tickets
+
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/UsuarioServlet?accion=listar">
 
                 <i class="fa-solid fa-users"></i>
+
                 Usuarios
+
             </a>
 
             <a class="menu-item active"
                href="${pageContext.request.contextPath}/ReporteServlet?accion=tiempos">
 
                 <i class="fa-solid fa-chart-column"></i>
+
                 Reportes
+
             </a>
 
             <a class="menu-item"
                href="${pageContext.request.contextPath}/HistorialServlet?accion=listar">
 
                 <i class="fa-solid fa-clock-rotate-left"></i>
+
                 Historial
+
             </a>
 
             <a class="menu-item logout"
                href="${pageContext.request.contextPath}/LogoutServlet">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
+
                 Cerrar sesión
+
             </a>
 
         </div>
@@ -105,12 +135,16 @@
             <div class="topbar">
 
                 <div>
-                    <h1>Reportes de Atención</h1>
+
+                    <h1>
+                        Reportes de Atención
+                    </h1>
 
                     <p>
                         Indicadores de tiempos de respuesta,
                         resolución y cierre de tickets.
                     </p>
+
                 </div>
 
                 <div class="user-badge">
@@ -124,94 +158,181 @@
 
                 <div class="section-header">
 
-                    <h2>Reporte de tiempos</h2>
+                    <div>
+
+                        <h2>
+                            <i class="fa-solid fa-chart-column"></i>
+                            Reporte de tiempos
+                        </h2>
+
+                        <p>
+                            Resumen de los tiempos empleados durante
+                            la atención de cada incidencia.
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <!-- CONTENEDOR RESPONSIVE -->
+                <!-- TABLA RESPONSIVE -->
                 <div class="table-wrapper">
 
-                    <table>
+                    <table class="tabla-reportes">
 
-                        <tr>
-                            <th>Código</th>
-                            <th>Título</th>
-                            <th>Estado</th>
-                            <th>Prioridad</th>
-                            <th>Categoría</th>
-                            <th>Usuario</th>
-                            <th>Técnico</th>
-                            <th>Min. respuesta</th>
-                            <th>Min. resolución</th>
-                            <th>Min. total</th>
-                        </tr>
+                        <thead>
 
-                        <%
-                            if (reporte != null) {
+                            <tr>
 
-                                for (Map<String, Object> r : reporte) {
-                        %>
+                                <th>Código</th>
 
-                        <tr>
+                                <th>Título</th>
 
-                            <td>
-                                <%= r.get("codigo_ticket") %>
-                            </td>
+                                <th>Estado</th>
 
-                            <td>
-                                <%= r.get("titulo") %>
-                            </td>
+                                <th>Prioridad</th>
 
-                            <td>
-                                <span class="estado-activo">
-                                    <%= r.get("estado") %>
-                                </span>
-                            </td>
+                                <th>Categoría</th>
 
-                            <td>
-                                <span class="badge">
-                                    <%= r.get("prioridad") %>
-                                </span>
-                            </td>
+                                <th>Usuario</th>
 
-                            <td>
-                                <%= r.get("nombre_categoria") %>
-                            </td>
+                                <th>Técnico</th>
 
-                            <td>
-                                <%= r.get("usuario_reporta") %>
-                            </td>
+                                <th>Min. respuesta</th>
 
-                            <td>
-                                <%= r.get("tecnico_asignado") == null
-                                        ? "Sin asignar"
-                                        : r.get("tecnico_asignado") %>
-                            </td>
+                                <th>Min. resolución</th>
 
-                            <td>
-                                <%= r.get("minutos_respuesta") == null
-                                        ? "-"
-                                        : r.get("minutos_respuesta") %>
-                            </td>
+                                <th>Min. total</th>
 
-                            <td>
-                                <%= r.get("minutos_resolucion") == null
-                                        ? "-"
-                                        : r.get("minutos_resolucion") %>
-                            </td>
+                            </tr>
 
-                            <td>
-                                <%= r.get("minutos_total") == null
-                                        ? "-"
-                                        : r.get("minutos_total") %>
-                            </td>
+                        </thead>
 
-                        </tr>
+                        <tbody>
 
-                        <%
+                            <%
+                                if (reporte != null
+                                        && !reporte.isEmpty()) {
+
+                                    for (Map<String, Object> r : reporte) {
+                            %>
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        <%= r.get("codigo_ticket") %>
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <%= r.get("titulo") %>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="estado-activo">
+
+                                        <%= r.get("estado") %>
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="badge">
+
+                                        <%= r.get("prioridad") %>
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <%= r.get("nombre_categoria") %>
+
+                                </td>
+
+                                <td>
+
+                                    <%= r.get("usuario_reporta") %>
+
+                                </td>
+
+                                <td>
+
+                                    <%= r.get("tecnico_asignado") == null
+                                            ? "Sin asignar"
+                                            : r.get("tecnico_asignado") %>
+
+                                </td>
+
+                                <td class="dato-tiempo">
+
+                                    <%= r.get("minutos_respuesta") == null
+                                            ? "-"
+                                            : r.get("minutos_respuesta") %>
+
+                                </td>
+
+                                <td class="dato-tiempo">
+
+                                    <%= r.get("minutos_resolucion") == null
+                                            ? "-"
+                                            : r.get("minutos_resolucion") %>
+
+                                </td>
+
+                                <td class="dato-tiempo">
+
+                                    <%= r.get("minutos_total") == null
+                                            ? "-"
+                                            : r.get("minutos_total") %>
+
+                                </td>
+
+                            </tr>
+
+                            <%
+                                    }
+                                } else {
+                            %>
+
+                            <tr>
+
+                                <td colspan="10"
+                                    class="tabla-vacia">
+
+                                    <div class="empty-message">
+
+                                        <i class="fa-solid fa-chart-simple"></i>
+
+                                        <h3>
+                                            No hay información disponible
+                                        </h3>
+
+                                        <p>
+                                            Todavía no existen tickets con
+                                            tiempos suficientes para generar
+                                            este reporte.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            <%
                                 }
-                            }
-                        %>
+                            %>
+
+                        </tbody>
 
                     </table>
 

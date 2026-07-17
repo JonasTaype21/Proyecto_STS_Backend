@@ -3,55 +3,174 @@
 <%@page import="bean.Ticket"%>
 <%@page import="bean.HistorialTicket"%>
 <%@page import="bean.SolucionTicket"%>
+<%@page import="bean.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    Ticket ticket = (Ticket) request.getAttribute("ticket");
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-    List<HistorialTicket> historial =
-            (List<HistorialTicket>) request.getAttribute("historial");
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
 
-    SolucionTicket solucion =
-            (SolucionTicket) request.getAttribute("solucion");
+    Ticket ticket
+            = (Ticket) request.getAttribute("ticket");
 
-    SimpleDateFormat formatoFecha =
-            new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    List<HistorialTicket> historial
+            = (List<HistorialTicket>) request.getAttribute("historial");
+
+    SolucionTicket solucion
+            = (SolucionTicket) request.getAttribute("solucion");
+
+    SimpleDateFormat formatoFecha
+            = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+
         <title>Detalle del Ticket</title>
 
         <link rel="stylesheet"
               href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
+
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
 
-    <body class="iframe-body">
+    <body class="dashboard-body">
 
-        <div class="iframe-content">
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
+
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
+
+        <aside class="sidebar">
+
+            <div class="logo-area">
+                <h2>STS</h2>
+                <span>Soporte TI</span>
+            </div>
+
+            <div class="menu-title">
+                MENÚ TÉCNICO
+            </div>
+
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp">
+
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="menu-item active"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>Tickets asignados</span>
+            </a>
+
+            <a class="menu-item logout"
+               href="${pageContext.request.contextPath}/LogoutServlet">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <div class="topbar">
+
+                <div>
+                    <h1>Detalle del Ticket</h1>
+
+                    <p>
+                        Consulta la información, solución e historial del ticket.
+                    </p>
+                </div>
+
+                <div class="user-badge">
+                    TÉCNICO
+                </div>
+
+            </div>
 
             <% if (ticket == null) { %>
 
-            <div class="detalle-card">
-                <h2>Ticket no encontrado</h2>
+            <section class="detalle-card">
 
-                <a class="btn-panel"
-                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados"
-                   target="_self">
-                    Volver a tickets
-                </a>
-            </div>
+                <div class="estado-vacio">
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    <h2>Ticket no encontrado</h2>
+
+                    <p>
+                        No fue posible cargar la información solicitada.
+                    </p>
+
+                    <a class="btn-panel"
+                       href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Volver a tickets
+                    </a>
+
+                </div>
+
+            </section>
 
             <% } else { %>
 
-            <div class="ticket-detail-header">
+            <div class="page-actions">
+
+                <a class="btn-panel secundario"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Volver a tickets
+                </a>
+
+                <% if ("ASIGNADO".equals(ticket.getEstado())
+                            || "EN_PROCESO".equals(ticket.getEstado())) { %>
+
+                <a class="btn-panel"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=atender&id=<%= ticket.getIdTicket() %>">
+
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    Atender ticket
+                </a>
+
+                <% } %>
+
+            </div>
+
+            <div class="ticket-detail-header detalle-card-header">
 
                 <div>
-                    <h1><%= ticket.getCodigoTicket() %></h1>
-                    <p><%= ticket.getTitulo() %></p>
+                    <span class="ticket-codigo">
+                        <%= ticket.getCodigoTicket() %>
+                    </span>
+
+                    <h1>
+                        <%= ticket.getTitulo() %>
+                    </h1>
                 </div>
 
                 <span class="estado-activo">
@@ -60,40 +179,56 @@
 
             </div>
 
-            <!-- DOS COLUMNAS -->
             <div class="detalle-tecnico-grid">
 
-                <!-- IZQUIERDA -->
                 <div>
 
-                    <div class="detalle-card">
+                    <section class="detalle-card">
 
-                        <h2>Información del ticket</h2>
+                        <h2>
+                            <i class="fa-solid fa-circle-info"></i>
+                            Información del ticket
+                        </h2>
 
                         <div class="info-grid">
 
                             <div>
                                 <span>Usuario</span>
-                                <strong><%= ticket.getUsuarioReporta() %></strong>
+
+                                <strong>
+                                    <%= ticket.getUsuarioReporta() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Categoría</span>
-                                <strong><%= ticket.getNombreCategoria() %></strong>
+
+                                <strong>
+                                    <%= ticket.getNombreCategoria() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Prioridad</span>
-                                <strong><%= ticket.getPrioridad() %></strong>
+
+                                <strong>
+                                    <span class="badge prioridad-<%= ticket.getPrioridad().toLowerCase() %>">
+                                        <%= ticket.getPrioridad() %>
+                                    </span>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Estado</span>
-                                <strong><%= ticket.getEstado() %></strong>
+
+                                <strong>
+                                    <%= ticket.getEstado() %>
+                                </strong>
                             </div>
 
                             <div>
                                 <span>Técnico asignado</span>
+
                                 <strong>
                                     <%= ticket.getTecnicoAsignado() == null
                                             ? "Sin asignar"
@@ -103,6 +238,7 @@
 
                             <div>
                                 <span>Fecha de creación</span>
+
                                 <strong>
                                     <%= ticket.getFechaCreacion() == null
                                             ? "-"
@@ -112,39 +248,66 @@
 
                         </div>
 
-                    </div>
+                    </section>
 
-                    <div class="detalle-card">
+                    <section class="detalle-card">
 
-                        <h2>Descripción del problema</h2>
+                        <h2>
+                            <i class="fa-solid fa-file-lines"></i>
+                            Descripción del problema
+                        </h2>
 
-                        <p><%= ticket.getDescripcion() %></p>
+                        <p class="texto-detalle">
+                            <%= ticket.getDescripcion() %>
+                        </p>
 
-                    </div>
+                    </section>
 
-                    <div class="detalle-card">
+                    <section class="detalle-card">
 
-                        <h2>Solución registrada</h2>
+                        <h2>
+                            <i class="fa-solid fa-circle-check"></i>
+                            Solución registrada
+                        </h2>
 
                         <% if (solucion != null) { %>
 
-                        <p>
-                            <strong>Diagnóstico:</strong>
-                            <%= solucion.getDiagnostico() %>
-                        </p>
+                        <div class="solucion-tecnica">
 
-                        <p>
-                            <strong>Solución aplicada:</strong>
-                            <%= solucion.getSolucionAplicada() %>
-                        </p>
+                            <div>
+                                <span class="detalle-label">
+                                    Diagnóstico
+                                </span>
 
-                        <p>
-                            <strong>Observaciones:</strong>
-                            <%= solucion.getObservaciones() == null
-                                    || solucion.getObservaciones().trim().isEmpty()
-                                    ? "-"
-                                    : solucion.getObservaciones() %>
-                        </p>
+                                <p>
+                                    <%= solucion.getDiagnostico() %>
+                                </p>
+                            </div>
+
+                            <div>
+                                <span class="detalle-label">
+                                    Solución aplicada
+                                </span>
+
+                                <p>
+                                    <%= solucion.getSolucionAplicada() %>
+                                </p>
+                            </div>
+
+                            <div>
+                                <span class="detalle-label">
+                                    Observaciones
+                                </span>
+
+                                <p>
+                                    <%= solucion.getObservaciones() == null
+                                            || solucion.getObservaciones().trim().isEmpty()
+                                                    ? "Sin observaciones"
+                                                    : solucion.getObservaciones() %>
+                                </p>
+                            </div>
+
+                        </div>
 
                         <% } else { %>
 
@@ -154,14 +317,16 @@
 
                         <% } %>
 
-                    </div>
+                    </section>
 
                 </div>
 
-                <!-- DERECHA -->
-                <div class="detalle-card">
+                <section class="detalle-card">
 
-                    <h2>Historial del ticket</h2>
+                    <h2>
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Historial del ticket
+                    </h2>
 
                     <% if (historial != null && !historial.isEmpty()) { %>
 
@@ -191,26 +356,27 @@
 
                                 <p>
                                     <%= h.getComentario() == null
-                                            ? "Sin comentario"
-                                            : h.getComentario() %>
+                                            || h.getComentario().trim().isEmpty()
+                                                    ? "Sin comentario"
+                                                    : h.getComentario() %>
                                 </p>
 
                                 <div class="timeline-meta">
 
                                     <span>
-                                        Responsable:
+                                        <strong>Responsable:</strong>
                                         <%= h.getNombreUsuario() %>
                                     </span>
 
                                     <span>
-                                        De:
+                                        <strong>Estado anterior:</strong>
                                         <%= h.getEstadoAnterior() == null
                                                 ? "-"
                                                 : h.getEstadoAnterior() %>
                                     </span>
 
                                     <span>
-                                        A:
+                                        <strong>Estado nuevo:</strong>
                                         <%= h.getEstadoNuevo() %>
                                     </span>
 
@@ -232,39 +398,13 @@
 
                     <% } %>
 
-                </div>
-
-            </div>
-
-            <!-- BOTONES -->
-            <div class="detalle-card">
-
-                <div class="form-actions">
-
-                    <a class="btn-panel secundario"
-                       href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados"
-                       target="_self">
-                        Volver a tickets
-                    </a>
-
-                    <% if ("ASIGNADO".equals(ticket.getEstado())
-                            || "EN_PROCESO".equals(ticket.getEstado())) { %>
-
-                    <a class="btn-panel"
-                       href="${pageContext.request.contextPath}/TicketServlet?accion=atender&id=<%= ticket.getIdTicket() %>"
-                       target="_self">
-                        Atender ticket
-                    </a>
-
-                    <% } %>
-
-                </div>
+                </section>
 
             </div>
 
             <% } %>
 
-        </div>
+        </main>
 
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 

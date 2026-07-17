@@ -125,10 +125,11 @@
 
             </div>
 
-            <!-- TARJETAS -->
+            <!-- TARJETAS FUNCIONALES -->
             <div class="cards-container">
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-link"
+                   href="${pageContext.request.contextPath}/TicketServlet?accion=listar">
 
                     <div class="card-icon azul">
                         <i class="fa-solid fa-ticket"></i>
@@ -139,9 +140,10 @@
                         <p>Gestión general de incidencias</p>
                     </div>
 
-                </div>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-link"
+                   href="${pageContext.request.contextPath}/UsuarioServlet?accion=listar">
 
                     <div class="card-icon verde">
                         <i class="fa-solid fa-users"></i>
@@ -152,9 +154,10 @@
                         <p>Administrar usuarios y técnicos</p>
                     </div>
 
-                </div>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-link"
+                   href="${pageContext.request.contextPath}/ReporteServlet?accion=tiempos">
 
                     <div class="card-icon naranja">
                         <i class="fa-solid fa-chart-column"></i>
@@ -165,9 +168,10 @@
                         <p>Indicadores y tiempos de atención</p>
                     </div>
 
-                </div>
+                </a>
 
-                <div class="card-dashboard">
+                <a class="card-dashboard card-link"
+                   href="${pageContext.request.contextPath}/HistorialServlet?accion=listar">
 
                     <div class="card-icon azul">
                         <i class="fa-solid fa-clock-rotate-left"></i>
@@ -178,15 +182,20 @@
                         <p>Trazabilidad de movimientos y estados</p>
                     </div>
 
-                </div>
+                </a>
 
             </div>
 
             <!-- ACCESOS RÁPIDOS -->
-            <div class="section-panel">
+            <div class="section-panel quick-access-panel">
 
                 <div class="section-header">
                     <h2>Accesos rápidos</h2>
+
+                    <p>
+                        Ingresa directamente a las principales opciones
+                        del sistema.
+                    </p>
                 </div>
 
                 <div class="quick-actions">

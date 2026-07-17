@@ -1,115 +1,234 @@
 <%@page import="java.util.List"%>
 <%@page import="bean.Ticket"%>
+<%@page import="bean.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    List<Ticket> lista =
-            (List<Ticket>) request.getAttribute("listaTickets");
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    List<Ticket> lista
+            = (List<Ticket>) request.getAttribute("listaTickets");
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+
         <title>Tickets Asignados</title>
 
         <link rel="stylesheet"
               href="${pageContext.request.contextPath}/recursos/style.css?v=<%= System.currentTimeMillis() %>">
+
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
 
-    <body class="iframe-body">
+    <body class="dashboard-body">
 
-        <div class="iframe-content">
+        <button type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú"
+                aria-expanded="false">
 
-            <h1>Tickets Asignados</h1>
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-            <div class="table-wrapper">
-                <table class="tabla-historial">
+        <div class="sidebar-overlay"
+             id="sidebarOverlay">
+        </div>
 
-                    <tr>
-                        <th>Código</th>
-                        <th>Usuario</th>
-                        <th>Categoría</th>
-                        <th>Título</th>
-                        <th>Prioridad</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
+        <aside class="sidebar">
 
-                    <% if (lista != null && !lista.isEmpty()) {
+            <div class="logo-area">
+                <h2>STS</h2>
+                <span>Soporte TI</span>
+            </div>
 
-                        for (Ticket t : lista) {
-                    %>
+            <div class="menu-title">
+                MENÚ TÉCNICO
+            </div>
 
-                    <tr>
-                        <td>
-                            <strong><%= t.getCodigoTicket() %></strong>
-                        </td>
+            <a class="menu-item"
+               href="${pageContext.request.contextPath}/tecnico/dashboardTecnico.jsp">
 
-                        <td><%= t.getUsuarioReporta() %></td>
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
 
-                        <td><%= t.getNombreCategoria() %></td>
+            <a class="menu-item active"
+               href="${pageContext.request.contextPath}/TicketServlet?accion=ticketsAsignados">
 
-                        <td><%= t.getTitulo() %></td>
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>Tickets asignados</span>
+            </a>
 
-                        <td>
-                            <span class="badge">
-                                <%= t.getPrioridad() %>
-                            </span>
-                        </td>
+            <a class="menu-item logout"
+               href="${pageContext.request.contextPath}/LogoutServlet">
 
-                        <td>
-                            <span class="estado-activo">
-                                <%= t.getEstado() %>
-                            </span>
-                        </td>
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </a>
 
-                        <td>
-                            <!-- Abre el detalle reemplazando esta tabla -->
-                            <a href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>"
-                               target="_self">
-                                Detalle
-                            </a>
+        </aside>
 
-                            <br>
+        <main class="main-content">
 
-                            <a
-                                href="http://localhost:4200/tickets/<%= t.getIdTicket() %>?origen=tecnico"
-                                target="_top">
+            <div class="topbar">
 
-                                Centro STS
+                <div>
+                    <h1>Tickets Asignados</h1>
 
-                            </a>
+                    <p>
+                        Consulta y atiende las incidencias asignadas a tu cuenta.
+                    </p>
+                </div>
 
-                            <!-- Solo se puede atender si está asignado o en proceso -->
-                            <% if ("ASIGNADO".equals(t.getEstado())
-                                || "EN_PROCESO".equals(t.getEstado())) { %>
+                <div class="user-badge">
+                    TÉCNICO
+                </div>
 
-                            <a href="${pageContext.request.contextPath}/TicketServlet?accion=atender&id=<%= t.getIdTicket() %>"
-                               target="_self">
-                                Atender
-                            </a>
+            </div>
+
+            <section class="section-panel">
+
+                <div class="section-header">
+
+                    <h2>Lista de tickets</h2>
+
+                    <p>
+                        Selecciona un ticket para consultar sus datos o iniciar la atención.
+                    </p>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table class="tabla-historial">
+
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Usuario</th>
+                                <th>Categoría</th>
+                                <th>Título</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <% if (lista != null && !lista.isEmpty()) {
+
+                                    for (Ticket t : lista) {
+                            %>
+
+                            <tr>
+
+                                <td data-label="Código">
+                                    <strong>
+                                        <%= t.getCodigoTicket() %>
+                                    </strong>
+                                </td>
+
+                                <td data-label="Usuario">
+                                    <%= t.getUsuarioReporta() %>
+                                </td>
+
+                                <td data-label="Categoría">
+                                    <%= t.getNombreCategoria() %>
+                                </td>
+
+                                <td data-label="Título">
+                                    <%= t.getTitulo() %>
+                                </td>
+
+                                <td data-label="Prioridad">
+
+                                    <span class="badge prioridad-<%= t.getPrioridad().toLowerCase() %>">
+                                        <%= t.getPrioridad() %>
+                                    </span>
+
+                                </td>
+
+                                <td data-label="Estado">
+
+                                    <span class="estado-activo">
+                                        <%= t.getEstado() %>
+                                    </span>
+
+                                </td>
+
+                                <td data-label="Acciones">
+
+                                    <div class="table-actions">
+
+                                        <a class="btn-table secundario"
+                                           href="${pageContext.request.contextPath}/TicketServlet?accion=detalle&id=<%= t.getIdTicket() %>">
+
+                                            <i class="fa-solid fa-eye"></i>
+                                            Detalle
+                                        </a>
+
+                                        <% if ("ASIGNADO".equals(t.getEstado())
+                                                    || "EN_PROCESO".equals(t.getEstado())) { %>
+
+                                        <a class="btn-table"
+                                           href="${pageContext.request.contextPath}/TicketServlet?accion=atender&id=<%= t.getIdTicket() %>">
+
+                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            Atender
+                                        </a>
+
+                                        <% } %>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            <%      }
+                                } else {
+                            %>
+
+                            <tr>
+
+                                <td colspan="7"
+                                    class="tabla-vacia">
+
+                                    <i class="fa-solid fa-inbox"></i>
+
+                                    <p>
+                                        No tienes tickets asignados actualmente.
+                                    </p>
+
+                                </td>
+
+                            </tr>
 
                             <% } %>
-                        </td>
-                    </tr>
 
-                    <%  }
+                        </tbody>
 
-                    } else { %>
+                    </table>
 
-                    <tr>
-                        <td colspan="7" style="text-align:center;">
-                            No tienes tickets asignados actualmente.
-                        </td>
-                    </tr>
+                </div>
 
-                    <% } %>
+            </section>
 
-                </table>
-            </div>
-        </div>
+        </main>
 
         <script src="${pageContext.request.contextPath}/recursos/main.js"></script>
 
